@@ -1,0 +1,51 @@
+#include <stdio.h>
+
+float calculateBill(char wardType, int days) {
+    float chargePerDay, totalBill, discount = 0;
+
+    // Determine charges based on ward type
+    switch (wardType) {
+        case 'G': chargePerDay = 1000; break; // General Ward
+        case 'S': chargePerDay = 2000; break; // Semi-Private
+        case 'P': chargePerDay = 5000; break; // Private
+        default:
+            printf("Invalid ward type.\n");
+            return 0;
+    }
+
+    totalBill = chargePerDay * days;
+
+    // Apply discount if applicable
+    if (days > 7) {
+        discount = totalBill * 0.05; // 5% discount
+    }
+
+    totalBill -= discount;
+
+    // Print billing details
+    printf("Total Bill Before Discount: ₹%.2f\n", chargePerDay * days);
+    printf("Discount Applied: ₹%.2f\n", discount);
+    printf("Final Bill Amount: ₹%.2f\n", totalBill);
+
+    return totalBill;
+}
+
+int main() {
+    char patientName[50], wardType;
+    int days;
+
+    // Input patient details
+    printf("Enter Patient Name: ");
+    fgets(patientName, sizeof(patientName), stdin);
+   
+    printf("Enter Ward Type (G/S/P): ");
+    scanf(" %c", &wardType); // Space before %c to consume newline
+
+    printf("Enter Number of Days: ");
+    scanf("%d", &days);
+
+    // Calculate and display the bill
+    calculateBill(wardType, days);
+
+    return 0;
+}

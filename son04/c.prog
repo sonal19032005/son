@@ -1,0 +1,52 @@
+#include <stdio.h>
+typedef struct {
+    int marks[3];
+} Marks;
+typedef struct {
+    int id;
+    char name[50];
+    Marks marks;
+    int total;
+    float average;
+    char grade;
+} Student;
+
+void readStudents(Student students[], int n);
+void calculateGrades(Student students[], int n);
+void displayStudents(Student students[], int n);
+int main() {
+    int n;
+    printf("Enter number of students: ");
+    scanf("%d", &n);
+    Student students[n];
+    readStudents(students, n);
+    calculateGrades(students, n);
+    displayStudents(students, n);
+    return 0;
+}
+void readStudents(Student students[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("Enter details (ID, Name, Marks in 3 subjects) for student %d: ", i + 1);
+        scanf("%d %s %d %d %d", &students[i].id, students[i].name, &students[i].marks.marks[0], &students[i].marks.marks[1], &students[i].marks.marks[2]);
+    }
+}
+void calculateGrades(Student students[], int n) {
+    for (int i = 0; i < n; i++) {
+        students[i].total = students[i].marks.marks[0] + students[i].marks.marks[1] + students[i].marks.marks[2];
+        students[i].average = students[i].total / 3.0;
+        if (students[i].average >= 90) {
+            students[i].grade = 'A';
+        } else if (students[i].average >= 75) {
+            students[i].grade = 'B';
+        } else if (students[i].average >= 50) {
+            students[i].grade = 'C';
+        } else {
+            students[i].grade = 'D';
+        }
+    }
+}
+void displayStudents(Student students[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%s - Total: %d, Average: %.2f, Grade: %c\n", students[i].name, students[i].total, students[i].average, students[i].grade);
+    }
+}

@@ -1,0 +1,75 @@
+#include<stdio.h>
+struct Employee_t{
+    int id;
+    char name[255];
+    float salary;
+    char department[50];
+};
+
+typedef struct Employee_t Employee;
+void readEmployee(Employee emp[],int n);
+void displayEmployee(Employee emp[],int n);
+Employee findhighestsalary(Employee emp[],int n);
+
+void raedEmployee(Employee emp[],int n){
+    printf("Enter employee details(ID, Name, Salary, Department):");
+    for(int i=0; i<n; i++){
+        scanf("%d%s%f%s", &emp[i].id, emp[i].name, &emp[i].salary, emp[i].department);
+    }
+
+}
+void saveEmployee(Employee emp[], int n){
+    FILE*file = fopen("employee.txt","w");
+    if(file==NULL){
+    printf("cannot creat file.\n");
+    return;
+}
+
+for(int i=0; i<n; i++){
+    fprintf(file,"%d %s %.2f %s\n",emp[i].id, emp[i].name, emp[i].salary, emp[i].department);
+}
+  fclose(file);
+}
+void loadEmployee(Employee emp[], int n){
+    FILE*file = fopen("employee.txt","r");
+    if(file==NULL){
+    printf("cannot creat file.\n");
+    return;
+}
+
+for(int i=0; i<n; i++){
+    fprintf(file,"%d %s %.2f %s\n",emp[i].id, emp[i].name, emp[i].salary, emp[i].department);
+}
+ fclose(file);
+}
+void displayEmployee(Employee emp[],int n){
+    printf("Employees:\n");
+    for(int i =0 ;i < n; i++){
+        printf("%d\n%s\n%.2f\n%s\n", emp[i].id, emp[i].name, emp[i].salary, emp[i].department);
+    }
+}
+Employee findhighestsalary(Employee emp[],int n){
+    Employee highsalaried = emp[0];
+    for(int i=1; i<n;i++){
+        if(emp[i].salary > highsalaried.salary){
+            highsalaried = emp[i];
+        }
+    }
+   return highsalaried;
+}
+
+int main(){
+    int employeecount;
+    printf("number of employe:");
+    scanf("%d",&employeecount);
+    Employee employees[1000];
+    raedEmployee(employees,employeecount);
+    saveEmployee(employees,employeecount);
+    displayEmployee(employees,employeecount);
+    Employee highestsalariedemployee = findhighestsalary(employees,employeecount);
+    printf("Employee with highest salary:%s,%.2f(%s)\n",
+        highestsalariedemployee.name,
+        highestsalariedemployee.salary,
+        highestsalariedemployee.department);
+    return 0;    
+}

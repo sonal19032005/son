@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+typedef struct Song {
+    char title[50];
+    struct Song* next;
+} Song;
+Song* createSong(const char* title) {
+    Song* newSong = malloc(sizeof(Song));
+    strncpy(newSong->title, title, sizeof(newSong->title) - 1);
+    newSong->title[49] = '\0';
+    newSong->next = NULL;
+    return newSong;
+}
+void insertSong(Song** playlist, const char* title) {
+    Song* newSong = createSong(title);
+    if (!*playlist) {
+        *playlist = newSong;
+        newSong->next = newSong;
+    } else {
+        Song* current = *playlist;
+        while (current->next != *playlist) current = current->next;
+        current->next = newSong;
+        newSong->next = *playlist;
+    }
+}
+Song* playNext(Song* currentSong) {
+    return currentSong ? currentSong->next : NULL;
+}
+void displaySong(Song* song) {
+    if (song) printf("Playing: %s\n", song->title);
+}
+void freePlaylist(Song** playlist) {
+  if (!*playlist) return;
+  Song* current = *playlist;
+  Song* nextNode;
+  Song* tail = *playlist;
+  while (tail->next != *playlist) {
+      tail = tail->next;
+  }
+  tail->next = NULL; 
+  current = *playlist;
+  while (current) {
+      nextNode = current->next;
+      free(current);      current = nextNode;
+  }
+  *playlist = NULL;
+}
+int main() {
+    Song* playlist = NULL;
+    insertSong(&playlist, "Song A");
+    insertSong(&playlist, "Song B");
+    insertSong(&playlist, "Song C");
+    Song* currentSong = playlist;
+    displaySong(currentSong);
+    currentSong = playNext(currentSong);
+    displaySong(currentSong);
+    currentSong = playNext(currentSong);
+    displaySong(currentSong);
+    currentSong = playNext(currentSong);
+    displaySong(currentSong); 
+    freePlaylist(&playlist);
+    return 0;
+}

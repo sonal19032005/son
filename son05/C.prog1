@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_HISTORY 100
+#define MAX_URL_LENGTH 50
+typedef struct {
+    char url[MAX_URL_LENGTH];
+} Page;
+typedef struct {
+    Page history[MAX_HISTORY];
+    int top;
+} BrowserHistory;
+void initBrowserHistory(BrowserHistory* browser) {
+    browser->top = -1;
+}
+void visitPage(BrowserHistory* browser, const char* url) {
+    if (browser->top < MAX_HISTORY - 1) {
+        strcpy(browser->history[++browser->top].url, url);
+        printf("Visited: %s\n", url);
+    } else {
+        printf("Browser history is full!\n");
+    }
+}
+void goBack(BrowserHistory* browser) {
+    if (browser->top > 0) {
+        printf("Action: Go Back\nCurrent Page: %s\n", browser->history[--browser->top].url);
+    } else {
+        printf("No previous page to go back to.\n");
+    }
+}
+void goForward(BrowserHistory* browser) {
+    if (browser->top < MAX_HISTORY - 1 && strlen(browser->history[browser->top + 1].url) > 0) {
+        printf("Action: Go Forward\nCurrent Page: %s\n", browser->history[++browser->top].url);
+    } else {
+        printf("No further page to go forward to.\n");
+    }
+}
+int main() {
+    BrowserHistory browser;
+    initBrowserHistory(&browser);
+    visitPage(&browser, "google.com");
+    visitPage(&browser, "github.com");
+    visitPage(&browser, "stackoverflow.com");
+    goBack(&browser);
+    goForward(&browser);
+    return 0;
+}

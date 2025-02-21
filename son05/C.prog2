@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_ITEMS 100
+typedef struct Stack {
+    char items[MAX_ITEMS][50];
+    int top;
+} Stack;
+void initStack(Stack* s) {
+    s->top = -1;
+}
+int isFull(Stack* s) {
+    return s->top == MAX_ITEMS - 1;
+}
+int isEmpty(Stack* s) {
+    return s->top == -1;
+}
+void push(Stack* s, const char* item) {
+    if (isFull(s)) {
+        printf("Stack is full! Cannot add more items.\n");
+        return;
+    }
+    strcpy(s->items[++s->top], item);
+    printf("Stock Added: %s\n", item);
+}
+char* pop(Stack* s) {
+    if (isEmpty(s)) {
+        printf("No items to dispatch.\n");
+        return NULL;
+    }
+    return s->items[s->top--];
+}
+void displayStock(Stack* s) {
+    if (isEmpty(s)) {
+        printf("No remaining stock.\n");
+        return;
+    }
+    printf("Remaining Stock: ");
+    for (int i = 0; i <= s->top; i++) {
+        printf("%s", s->items[i]);
+        if (i < s->top) printf(", ");
+    }
+    printf("\n");
+}
+int main() {
+    Stack warehouse;
+    initStack(&warehouse);
+    push(&warehouse, "Item A");
+    push(&warehouse, "Item B");
+    push(&warehouse, "Item C");
+    char* dispatchedItem = pop(&warehouse);
+    if (dispatchedItem) {
+        printf("Dispatching Item: %s\n", dispatchedItem);
+    }
+    displayStock(&warehouse);
+    return 0;
+}

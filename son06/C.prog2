@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef struct {
+    char name[50];
+    int price;
+} Product;
+void swap(Product *a, Product *b) {
+    Product temp = *a;
+    *a = *b;
+    *b = temp;
+}
+void sortProducts(Product products[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (products[j].price > products[j + 1].price) {
+                swap(&products[j], &products[j + 1]);
+            }
+        }
+    }
+}
+int binarySearch(Product products[], int n, char *name) {
+    int left = 0;
+    int right = n - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        int compare = strcmp(products[mid].name, name);
+        if (compare == 0) {
+            return mid;
+        } else if (compare < 0) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return -1;
+}
+void printCheapestMostExpensive(Product products[], int n) {
+    printf("Cheapest Product: %s (%d)\n", products[0].name, products[0].price);
+    printf("Most Expensive Product: %s (%d)\n", products[n - 1].name, products[n - 1].price);
+}
+int main() {
+    Product products[] = {
+        {"Laptop", 50000},
+        {"Mobile", 20000},
+        {"Headphones", 5000}
+    };
+    int n = sizeof(products) / sizeof(products[0]);
+    sortProducts(products, n);
+    printf("Sorted Products:\n");
+    for (int i = 0; i < n; i++) {
+        printf("%s (%d)\n", products[i].name, products[i].price);
+    }
+    char name[] = "Mobile";
+    int index = binarySearch(products, n, name);
+    if (index != -1) {
+        printf("Product found: %s (%d)\n", products[index].name, products[index].price);
+    } else {
+        printf("Product not found\n");
+    }
+    printCheapestMostExpensive(products, n);
+    return 0;
+}

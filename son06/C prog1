@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <string.h>
+typedef struct {
+    int rollNo;
+    char name[50];
+    int marks;
+} Student;
+void swap(Student *a, Student *b) {
+    Student temp = *a;
+    *a = *b;
+    *b = temp;
+}
+void sortStudents(Student students[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (students[j].marks < students[j + 1].marks) {
+                swap(&students[j], &students[j + 1]);
+            }
+        }
+    }
+}
+int binarySearch(Student students[], int n, int rollNo) {
+    int left = 0;
+    int right = n - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (students[mid].rollNo == rollNo) {
+            return mid;
+        } else if (students[mid].rollNo < rollNo) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return -1;
+}
+void printTopStudents(Student students[], int n) {
+    printf("Top 3 Students:\n");
+    for (int i = 0; i < 3 && i < n; i++) {
+        printf("%s (%d)\n", students[i].name, students[i].marks);
+    }
+}
+int main() {
+    Student students[] = {
+        {101, "Alice", 85},
+        {102, "Bob", 90},
+        {103, "Charlie", 75}
+    };
+    int n = sizeof(students) / sizeof(students[0]);
+    sortStudents(students, n);
+    printf("Sorted Students:\n");
+    for (int i = 0; i < n; i++) {
+        printf("%s (%d)\n", students[i].name, students[i].marks);
+    }
+    int rollNo = 102;
+    int index = binarySearch(students, n, rollNo);
+    if (index != -1) {
+        printf("Student found: %s (%d)\n", students[index].name, students[index].marks);
+    } else {
+        printf("Student not found\n");
+    }
+    printTopStudents(students, n);
+    return 0;
+}

@@ -1,0 +1,36 @@
+#include <stdio.h>
+void selectionSort(int ambulances[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int minIndex = i;
+        for (int j = i + 1; j < n; j++) {
+            if (ambulances[j] < ambulances[minIndex]) {
+                minIndex = j;
+            }
+        }
+        int temp = ambulances[minIndex];
+        ambulances[minIndex] = ambulances[i];
+        ambulances[i] = temp;
+    }
+}
+void printAmbulances(int ambulances[], int n) {
+    printf("Ambulances (Distance in km): [");
+    for (int i = 0; i < n; i++) {
+        printf("%d", ambulances[i]);
+        if (i < n - 1) {
+            printf(", ");
+        }
+    }
+    printf("]\n");
+}
+int main() {
+    int ambulances[] = {10, 3, 7, 1, 5};
+    int n = sizeof(ambulances) / sizeof(ambulances[0]);
+
+    printf("Original Ambulances:\n");
+    printAmbulances(ambulances, n);
+    selectionSort(ambulances, n);
+    printf("Sorted Ambulances:\n");
+    printAmbulances(ambulances, n);
+    printf("Nearest Ambulance Assigned: Distance %d km\n", ambulances[0]);
+    return 0;
+}
